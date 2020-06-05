@@ -86,9 +86,9 @@
     <None Include="Resources\BoardTemplate.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\BlackChecker.png" />
     <None Include="Resources\RedChecker.png" />
     <None Include="Resources\BoardTemplate.jpg" />
-    <None Include="Resources\BlackChecker.png" />
     <None Include="Resources\1.bmp" />
     <Content Include="Resources\1.PNG" />
     <Content Include="Resources\2.PNG" />
