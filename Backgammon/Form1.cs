@@ -192,21 +192,32 @@ namespace Backgammon
                 DeletePictureBox(x, y);
                 if (x < 6)
                 {
-                    if (y - pasi > 0)
+                    if (y - pasi >= 0)
                     {
                         y -= pasi;
 
                         if (MatrixBoard[0, y] == 0) { MatrixBoard[0, y] = 1; }
                         else
                         {
+                            int ct = 0;
                             for (int i = 0; i < 6; i++)
                             {
                                 if (MatrixBoard[i, y] == 1)
                                 {
-                                    MatrixBoard[x + 1, y] = 1;
-                                    break;
+                                    ct++;
                                 }
                                 MatrixBoard[x, tempY] = 1;
+                            }
+
+                            while (ct != 0)
+                            {
+                                MatrixBoard[ct, y] = 1;
+
+                                if (MatrixBoard[ct, y] == 1)
+                                {
+                                    MatrixBoard[x, tempY] = 0;
+                                }
+                                ct--;
                             }
                         }
                     }
@@ -243,7 +254,6 @@ namespace Backgammon
                 else
                 {
                     y += pasi;
-
                     for (int i = 11; i > 5; i--)
                     {
                         if (MatrixBoard[i, y] == 0)
@@ -252,6 +262,8 @@ namespace Backgammon
                             MatrixBoard[i, y] = 1;
                             break;
                         }
+                        else
+                        MatrixBoard[x, tempY] = 1;
                     }
                 }
 
