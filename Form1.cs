@@ -192,48 +192,89 @@ namespace Backgammon
                 DeletePictureBox(x, y);
                 if (x < 6)
                 {
-                    if (y - pasi > 0)
+                    if (y - pasi >= 0)
                     {
                         y -= pasi;
 
-                        for (int i = 0; i < 6; i++)
+                        if (MatrixBoard[0, y] == 0) { MatrixBoard[0, y] = 1; }
+                        else
                         {
-                            if (MatrixBoard[i, y] == 0)
+                            int ct = 0;
+                            for (int i = 0; i < 6; i++)
                             {
-                                MatrixBoard[i, y] = 1;
-                                break;
+                                if (MatrixBoard[i, y] == 1)
+                                {
+                                    ct++;
+                                }
+                                MatrixBoard[x, tempY] = 1;
                             }
-                            else
+
+                            while (ct != 0)
                             {
-                                //MatrixBoard[x, tempY] = 1;
+                                MatrixBoard[ct, y] = 1;
+
+                                if (MatrixBoard[ct, y] == 1)
+                                {
+                                    MatrixBoard[x, tempY] = 0;
+                                }
+                                ct--;
                             }
                         }
                     }
                     else
                     {
-                        y = Math.Abs(y - pasi);
-                        for (int i = 11; i > 5; i--)
+                        y = Math.Abs(y - pasi) - 1;
+                        if (MatrixBoard[11, y] == 0) { MatrixBoard[11, y] = 1; }
+                        else
                         {
-                            MatrixBoard[i, y - 1] = 1;
-                            break;
+                            int ct = 0;
+                            for (int i = 11; i > 5; i--)
+                            {
+                                if (MatrixBoard[i, y] == 1)
+                                {
+                                    ct++;
+                                }
+                                MatrixBoard[x, tempY] = 1;
+                            }
+
+                            while (ct != 0)
+                            {
+                                MatrixBoard[11 - ct, y] = 1;
+
+                                if (MatrixBoard[11 - ct, y] == 1) 
+                                {
+                                    MatrixBoard[x, tempY] = 0;
+                                }
+                                ct--;
+                            }
                         }
                     }
-
                 }
                 else
                 {
                     y += pasi;
-                    for (int i = 11; i > 5; i--)
+                    if (MatrixBoard[11, y] == 0) { MatrixBoard[11, y] = 1; }
+                    else
                     {
-                        if (MatrixBoard[i, y] == 0)
+                        int ct = 0;
+                        for (int i = 11; i > 5; i--)
                         {
-
-                            MatrixBoard[i, y] = 1;
-                            break;
-                        }
-                        else
-                        {
+                            if (MatrixBoard[i, y] == 1)
+                            {
+                                ct++;
+                            }
                             MatrixBoard[x, tempY] = 1;
+                        }
+
+                        while (ct != 0)
+                        {
+                            MatrixBoard[11 - ct, y] = 1;
+
+                            if (MatrixBoard[11 - ct, y] == 1)
+                            {
+                                MatrixBoard[x, tempY] = 0;
+                            }
+                            ct--;
                         }
                     }
                 }
