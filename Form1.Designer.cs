@@ -31,12 +31,12 @@
             this.rollDice = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.pictureBox25 = new System.Windows.Forms.PictureBox();
             this.pictureBox24 = new System.Windows.Forms.PictureBox();
             this.CubePictureBox2 = new System.Windows.Forms.PictureBox();
             this.CubePictureBox1 = new System.Windows.Forms.PictureBox();
             this.BoardPictureBox = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox25)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox24)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CubePictureBox2)).BeginInit();
@@ -70,6 +70,16 @@
             this.textBox2.Size = new System.Drawing.Size(133, 23);
             this.textBox2.TabIndex = 39;
             this.textBox2.Text = "Checkers Player2";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(745, 28);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(106, 17);
+            this.label1.TabIndex = 42;
+            this.label1.Text = "Sum of cubes";
+            this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SumCubesClick);
             // 
             // pictureBox25
             // 
@@ -116,16 +126,6 @@
             this.BoardPictureBox.Size = new System.Drawing.Size(1500, 846);
             this.BoardPictureBox.TabIndex = 0;
             this.BoardPictureBox.TabStop = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(745, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 17);
-            this.label1.TabIndex = 42;
-            this.label1.Text = "label1";
-            this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SumCubesClick);
             // 
             // Form1
             // 

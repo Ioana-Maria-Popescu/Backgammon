@@ -51,7 +51,7 @@ namespace Backgammon
                         pic.Width = 60;
                         pic.Height = 60;
                         pic.Location = new Point(j * 77 + 135, i * 52 + 120);
-                        pic.MouseClick += new MouseEventHandler(pic_OnClick);
+                        pic.MouseClick += new MouseEventHandler(pic_OnClickBlack);
                         this.Controls.Add(pic);
                         pic.BringToFront();
                     }
@@ -65,7 +65,7 @@ namespace Backgammon
                         pic.Width = 60;
                         pic.Height = 60;
                         pic.Location = new Point(j * 77 + 135, i * 52 + 120);
-                        pic.MouseClick += new MouseEventHandler(pic_OnClick);
+                        pic.MouseClick += new MouseEventHandler(pic_OnClickRed);
                         this.Controls.Add(pic);
                         pic.BringToFront();
                     }
@@ -75,7 +75,6 @@ namespace Backgammon
         }
         public void InitializeComponentsOnBoard()
         {
-            
             //0-nimic 1-black 2-red
             for(int i = 0; i < 5; i++)
             {
@@ -131,6 +130,7 @@ namespace Backgammon
                 case 6: CubePictureBox2.Image = Properties.Resources._6; break;
             }
             label1.Text = (DiceRoll.Cube1 + DiceRoll.Cube2).ToString();
+            label1.Font = new Font("Arial", 30);
 
 
         }
@@ -164,17 +164,16 @@ namespace Backgammon
             Move = 3;
         }
 
-        private void pic_OnClick(object sender, EventArgs e)
+        private void pic_OnClickBlack(object sender, EventArgs e)
         {
+            
             var pb = sender as PictureBox;
             var Coord = pb.Name.Split('_');
             CoordX = Convert.ToInt32(Coord[1]);
             CoordY = Convert.ToInt32(Coord[2]);
 
             Player playerHuman = new Player("Human", Player.PlayerColor.Black);
-            Player playerAI = new Player("AI", Player.PlayerColor.Red);
             playerHuman.isTurn = true;
-            playerAI.isTurn = false;
             var x = CoordX;
             var y = CoordY;
             int tempY = y;
@@ -281,9 +280,22 @@ namespace Backgammon
 
             }
             Redeseneaza();
-            /*
-            playerHuman.isTurn = false;
+            
+        }
+
+
+        private void pic_OnClickRed(object sender, EventArgs e)
+        {
+            var pb = sender as PictureBox;
+            var Coord = pb.Name.Split('_');
+            CoordX = Convert.ToInt32(Coord[1]);
+            CoordY = Convert.ToInt32(Coord[2]);
+
+            Player playerAI = new Player("AI", Player.PlayerColor.Red);
             playerAI.isTurn = true;
+            var x = CoordX;
+            var y = CoordY;
+            int tempY = y;
 
             if (playerAI.Name == "AI" && playerAI.isTurn == true)
             {
@@ -296,60 +308,100 @@ namespace Backgammon
                 if (Move == 3) { pasi = (a + b); }
 
                 DeletePictureBox(x, y);
-                if (x < 6)
+                if (x > 6)
                 {
-                    if (y - pasi > 0)
+                    if (y - pasi >= 0)
                     {
                         y -= pasi;
 
-                        for (int i = 0; i < 6; i++)
+                        if (MatrixBoard[11, y] == 0) { MatrixBoard[11, y] = 2; }
+                        else
                         {
-                            if (MatrixBoard[i, y] == 0)
+                            int ct = 0;
+                            for (int i = 11; i > 5; i--)
                             {
-                                MatrixBoard[i, y] = 2;
-                                break;
-                            }
-                            else
-                            {
+                                if (MatrixBoard[i, y] == 2)
+                                {
+                                    ct++;
+                                }
                                 MatrixBoard[x, tempY] = 2;
+                            }
+
+                            while (ct != 0)
+                            {
+                                MatrixBoard[11 - ct, y] = 2;
+
+                                if (MatrixBoard[11 - ct, y] == 2)
+                                {
+                                    MatrixBoard[x, tempY] = 0;
+                                }
+                                ct--;
                             }
                         }
                     }
                     else
                     {
-                        y = Math.Abs(y - pasi);
-                        for (int i = 11; i > 5; i--)
+                        y = Math.Abs(y - pasi) - 1;
+                        if (MatrixBoard[0, y] == 0) { MatrixBoard[0, y] = 2; }
+                        else
                         {
-                            MatrixBoard[i, y - 1] = 2;
-                            break;
+                            int ct = 0;
+                            for (int i = 0; i < 6; i++)
+                            {
+                                if (MatrixBoard[i, y] == 2)
+                                {
+                                    ct++;
+                                }
+                                MatrixBoard[x, tempY] = 2;
+                            }
+
+                            while (ct != 0)
+                            {
+                                MatrixBoard[ct, y] = 2;
+
+                                if (MatrixBoard[ct, y] == 2)
+                                {
+                                    MatrixBoard[x, tempY] = 0;
+                                }
+                                ct--;
+                            }
                         }
                     }
-
                 }
                 else
                 {
                     y += pasi;
-                    for (int i = 11; i > 5; i--)
+                    if (MatrixBoard[0, y] == 0) { MatrixBoard[0, y] = 2; }
+                    else
                     {
-                        if (MatrixBoard[i, y] == 0)
+                        int ct = 0;
+                        for (int i = 0; i < 6; i++)
                         {
-
-                            MatrixBoard[i, y] = 2;
-                            break;
-                        }
-                        else
-                        {
+                            if (MatrixBoard[i, y] == 2)
+                            {
+                                ct++;
+                            }
                             MatrixBoard[x, tempY] = 2;
+                        }
+
+                        while (ct != 0)
+                        {
+                            MatrixBoard[ct, y] = 2;
+
+                            if (MatrixBoard[ct, y] == 2)
+                            {
+                                MatrixBoard[x, tempY] = 0;
+                            }
+                            ct--;
                         }
                     }
                 }
 
             }
             Redeseneaza();
-            */
-
         }
-        
+
+
     }
 
 
