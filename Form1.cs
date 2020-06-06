@@ -20,14 +20,22 @@ namespace Backgammon
         public List<PictureBox> dices { get; set; }
         public Dice DiceRoll { get; set; }
 
-        public int Move = 0;
+        public int Moves = 0;
+        public int MiniScoreCubes = 0;
 
-        public int CoordX, CoordY; 
+        public int CoordX, CoordY;
+
+        Player playerHuman = new Player("Human", Player.PlayerColor.Black);
+        Player playerAI = new Player("AI", Player.PlayerColor.Red);
+
 
         public Form1()
         {
             InitializeComponent();
             InitializeComponentsOnBoard();
+            playerHuman.isTurn = true;
+            label2.Text = "Hu";
+            label2.Font = new Font("Arial", 30);
             Redeseneaza();
         }
 
@@ -110,6 +118,7 @@ namespace Backgammon
         {
             DiceRoll = new Dice();
             DiceRoll.RollDice();
+            MiniScoreCubes = 1;
             
             switch (DiceRoll.Cube1)
             {
@@ -131,8 +140,6 @@ namespace Backgammon
             }
             label1.Text = (DiceRoll.Cube1 + DiceRoll.Cube2).ToString();
             label1.Font = new Font("Arial", 30);
-
-
         }
 
         public void DeletePictureBox(int x, int y)
@@ -151,42 +158,69 @@ namespace Backgammon
 
         private void Cube1Click(object sender, MouseEventArgs e)
         {
-            Move = 1;
+            Moves = 1;
+            MiniScoreCubes++;
         }
 
         private void Cube2Click(object sender, MouseEventArgs e)
         {
-            Move = 2;
+            Moves = 2;
+            MiniScoreCubes++;
         }
 
         private void SumCubesClick(object sender, MouseEventArgs e)
         {
-            Move = 3;
+            Moves = 3;
+            MiniScoreCubes+=2;
         }
+
+
+
+        private void SwitchPlayer(int p)
+        {
+            //=1 randul AI
+            //=0 randul Human
+
+            if (p == 0)
+            {
+                playerHuman.isTurn = true;
+                playerAI.isTurn = false;
+                label2.Text = playerHuman.Name;
+                MiniScoreCubes = 0;
+            }
+            if (p == 1)
+            {
+                playerHuman.isTurn = false;
+                playerAI.isTurn = true;
+                label2.Text = playerAI.Name;
+                MiniScoreCubes = 0;
+            }
+            
+        }
+
+
 
         private void pic_OnClickBlack(object sender, EventArgs e)
         {
-            
             var pb = sender as PictureBox;
             var Coord = pb.Name.Split('_');
             CoordX = Convert.ToInt32(Coord[1]);
             CoordY = Convert.ToInt32(Coord[2]);
 
-            Player playerHuman = new Player("Human", Player.PlayerColor.Black);
-            playerHuman.isTurn = true;
+
             var x = CoordX;
             var y = CoordY;
             int tempY = y;
 
-            if (playerHuman.Name == "Human" && playerHuman.isTurn == true)
+            if (playerHuman.isTurn == true)  
             {
                 var a = DiceRoll.Cube1;
                 var b = DiceRoll.Cube2;
                 MatrixBoard[x, y] = 0;
                 var pasi = 0;
-                if (Move == 1) { pasi = a; }
-                if (Move == 2) { pasi = b; }
-                if (Move == 3) { pasi = (a + b); }
+                if (Moves == 1) { pasi = a; }
+                if (Moves == 2) { pasi = b; }
+                if (Moves == 3) { pasi = (a + b); }
 
                 DeletePictureBox(x, y);
                 if (x < 6)
@@ -280,6 +314,11 @@ namespace Backgammon
 
             }
             Redeseneaza();
+            if (MiniScoreCubes == 3)
+            {
+                int p = 1;
+                SwitchPlayer(p);
+            }
             
         }
 
@@ -291,21 +330,19 @@ namespace Backgammon
             CoordX = Convert.ToInt32(Coord[1]);
             CoordY = Convert.ToInt32(Coord[2]);
 
-            Player playerAI = new Player("AI", Player.PlayerColor.Red);
-            playerAI.isTurn = true;
             var x = CoordX;
             var y = CoordY;
             int tempY = y;
 
-            if (playerAI.Name == "AI" && playerAI.isTurn == true)
+            if (playerAI.isTurn == true) 
             {
                 var a = DiceRoll.Cube1;
                 var b = DiceRoll.Cube2;
                 MatrixBoard[x, y] = 0;
                 var pasi = 0;
-                if (Move == 1) { pasi = a; }
-                if (Move == 2) { pasi = b; }
-                if (Move == 3) { pasi = (a + b); }
+                if (Moves == 1) { pasi = a; }
+                if (Moves == 2) { pasi = b; }
+                if (Moves == 3) { pasi = (a + b); }
 
                 DeletePictureBox(x, y);
                 if (x > 6)
@@ -399,6 +436,11 @@ namespace Backgammon
 
             }
             Redeseneaza();
+            if (MiniScoreCubes == 3)
+            {
+                int p = 0;
+                SwitchPlayer(p);
+            }
         }
 
 
