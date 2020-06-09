@@ -12,15 +12,15 @@ namespace Backgammon
 
         public int Cube2 { get; set; }
 
-        public bool isDouble { get; set; }
+        public bool IsDouble { get; set; }
 
         private Random random = new Random();
         public void RollDice()
         {
             Cube1 = random.Next(1, 7);
             Cube2 = random.Next(1, 7);
-            if (Cube1 == Cube2) isDouble = true;
-            else isDouble = false;
+            if (Cube1 == Cube2) IsDouble = true;
+            else IsDouble = false;
         }
     }
 }
