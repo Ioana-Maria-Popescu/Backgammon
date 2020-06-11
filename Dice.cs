@@ -17,8 +17,8 @@ namespace Backgammon
         private Random random = new Random();
         public void RollDice()
         {
-            Cube1 = random.Next(1, 3);
-            Cube2 = random.Next(1, 3);
+            Cube1 = random.Next(1, 7);
+            Cube2 = random.Next(1, 7);
             if (Cube1 == Cube2) IsDouble = true;
             else IsDouble = false;
         }

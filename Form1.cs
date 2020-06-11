@@ -449,11 +449,15 @@ namespace Backgammon
             }
         }
 
-        private (int X, int Y) RandomRedChecker()
+        //private (int X, int Y) RandomRedChecker()
+        private int[] RandomRedChecker()
         {
 
-            bool found = false;
+            int[] rez = new int[2];
             int x = 0, y = 0;
+            
+            bool found = false;
+            
             while (found == false)
             {
                 Random random = new Random();
@@ -481,7 +485,9 @@ namespace Backgammon
                     x++;
                 }
             }
-            return (x, y);
+            rez[0] = x;
+            rez[1] = y;
+            return rez;
         }
 
         private void Pic_OnClickRed(object sender, EventArgs e)
@@ -492,9 +498,15 @@ namespace Backgammon
             CoordX = Convert.ToInt32(Coord[1]);
             CoordY = Convert.ToInt32(Coord[2]);
 
-            var temp = RandomRedChecker();
-            var x = temp.X;
-            var y = temp.Y;
+            int[] temp = RandomRedChecker();
+            //var x = temp.X;
+            //var y = temp.Y;
+
+            ///
+            var x = temp[0];
+            var y = temp[1];
+            ///
+
             int tempY = y;
 
             if (playerAI.isTurn == true)
@@ -642,6 +654,35 @@ namespace Backgammon
             }
         }
 
+        public List<int> GetAllPosibbleMovesRedPlayer()
+        {
+            List<int> p = new List<int>();
+            for(int i = 5; i >= 0; i--)
+            {
+                for(int j = 0; j < 12; j++)
+                {
+                    if (MatrixBoard[i, j] == 2 && MatrixBoard[i + 1, j] == 0)
+                    {
+                        p.Add(i);
+                        p.Add(j);
+                    }
+                }
+            }
+            for (int i = 6; i < 12; i++)
+            {
+                for (int j = 0; j < 12; j++)
+                {
+                    if (MatrixBoard[i, j] == 2 && MatrixBoard[i - 1, j] == 0)
+                    {
+                        p.Add(i);
+                        p.Add(j);
+                    }
+                }
+            }
+
+            return p;
+        }
+
         private void OutPics_OnClickRed(object sender, MouseEventArgs e)
         {
 
@@ -660,10 +701,18 @@ namespace Backgammon
         private void button1_Click(object sender, EventArgs e)
         {
 
-            var temp = RandomRedChecker();
-            var x = temp.X;
-            var y = temp.Y;
+            //var temp = RandomRedChecker();
+            //var x = temp.X;
+            //var y = temp.Y;
+            
+            ////
+            int[] temp = RandomRedChecker();
+            var x = temp[0];
+            var y = temp[1];
+            ////
+
             int tempY = y;
+
 
             //try
             //{
@@ -973,7 +1022,12 @@ namespace Backgammon
             else if (b == PieceBackOnBoard) { InsertChecker(x, y, b); }
                   
         }
-        
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+                GetAllPosibbleMovesRedPlayer();
+        }
+
         public void InsertChecker(int x, int y ,int zar)
         {
             {
