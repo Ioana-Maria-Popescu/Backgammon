@@ -654,7 +654,7 @@ namespace Backgammon
             }
         }
 
-        public List<int> GetAllPosibbleMovesRedPlayer()
+        public List<int> GetAllPosibbleCheckersToMoveRedPlayer()
         {
             List<int> p = new List<int>();
             for(int i = 5; i >= 0; i--)
@@ -685,6 +685,24 @@ namespace Backgammon
 
         private void OutPics_OnClickRed(object sender, MouseEventArgs e)
         {
+            var pb = sender as PictureBox;
+            var Coord = pb.Name.Split('_');
+            CoordX = Convert.ToInt32(Coord[1]);
+            CoordY = Convert.ToInt32(Coord[2]);
+
+
+            var x = CoordX;
+            var y = CoordY;
+
+            var a = DiceRoll.Cube1;
+            var b = DiceRoll.Cube2;
+
+            Random rand = new Random();
+            int position = rand.Next(1, 7);
+
+            DeletePictureBoxOut(x, y);
+
+            /////////////////////
 
         }
 
@@ -712,8 +730,6 @@ namespace Backgammon
             ////
 
             int tempY = y;
-
-
             //try
             //{
             if (playerAI.isTurn == true)
@@ -782,55 +798,110 @@ namespace Backgammon
 
 
                 DeletePictureBox(x, y);
-                if (x > 6)
+                if (OutPieces[1, 0] == 0)
                 {
-                    if (y - pasi >= 0)
+                    if (x > 6)
                     {
-                        y -= pasi;
-
-                        if (MatrixBoard[11, y] == 1 && MatrixBoard[10, y] == 0)
+                        if (y - pasi >= 0)
                         {
-                            MoveThePieceToMatrix(11, y);
-                            MatrixBoard[11, y] = 2;
-                            Redeseneaza();
+                            y -= pasi;
 
-                        }
-                        else
-                        {
-                            if (MatrixBoard[11, y] == 1 && MatrixBoard[10, y] == 1)
+                            if (MatrixBoard[11, y] == 1 && MatrixBoard[10, y] == 0)
                             {
-                                MatrixBoard[x, tempY] = 2;
-                                if (IsDouble == true)
-                                {
-                                    MiniScoreCubes--;
-                                }
-                                else MiniScoreCubes -= 2;
-                                label3.Text = MiniScoreCubes.ToString();
+                                MoveThePieceToMatrix(11, y);
+                                MatrixBoard[11, y] = 2;
+                                Redeseneaza();
+
                             }
                             else
                             {
-                                if (MatrixBoard[11, y] == 0) { MatrixBoard[11, y] = 2; }
+                                if (MatrixBoard[11, y] == 1 && MatrixBoard[10, y] == 1)
+                                {
+                                    MatrixBoard[x, tempY] = 2;
+                                    if (IsDouble == true)
+                                    {
+                                        MiniScoreCubes--;
+                                    }
+                                    else MiniScoreCubes -= 2;
+                                    label3.Text = MiniScoreCubes.ToString();
+                                }
                                 else
                                 {
-                                    int ct = 0;
-                                    for (int i = 11; i > 5; i--)
+                                    if (MatrixBoard[11, y] == 0) { MatrixBoard[11, y] = 2; }
+                                    else
                                     {
-                                        if (MatrixBoard[i, y] == 2)
+                                        int ct = 0;
+                                        for (int i = 11; i > 5; i--)
                                         {
-                                            ct++;
+                                            if (MatrixBoard[i, y] == 2)
+                                            {
+                                                ct++;
+                                            }
+                                            //MatrixBoard[x, tempY] = 2;
                                         }
-                                        //MatrixBoard[x, tempY] = 2;
+
+                                        while (ct != 0)
+                                        {
+                                            MatrixBoard[11 - ct, y] = 2;
+
+                                            if (MatrixBoard[11 - ct, y] == 2)
+                                            {
+                                                MatrixBoard[x, tempY] = 0;
+                                            }
+                                            ct--;
+                                        }
                                     }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            y = Math.Abs(y - pasi) - 1;
+                            if (MatrixBoard[0, y] == 1 && MatrixBoard[1, y] == 0)
+                            {
+                                MoveThePieceToMatrix(0, y);
+                                MatrixBoard[0, y] = 2;
+                                Redeseneaza();
 
-                                    while (ct != 0)
+                            }
+                            else
+                            {
+                                if (MatrixBoard[0, y] == 1 && MatrixBoard[1, y] == 1)
+                                {
+                                    MatrixBoard[x, tempY] = 2;
+                                    if (IsDouble == true)
                                     {
-                                        MatrixBoard[11 - ct, y] = 2;
-
-                                        if (MatrixBoard[11 - ct, y] == 2)
+                                        MiniScoreCubes--;
+                                    }
+                                    else MiniScoreCubes -= 2;
+                                    label3.Text = MiniScoreCubes.ToString();
+                                }
+                                else
+                                {
+                                    if (MatrixBoard[0, y] == 0) { MatrixBoard[0, y] = 2; }
+                                    else
+                                    {
+                                        int ct = 0;
+                                        for (int i = 0; i < 6; i++)
                                         {
-                                            MatrixBoard[x, tempY] = 0;
+                                            if (MatrixBoard[i, y] == 2)
+                                            {
+                                                ct++;
+                                            }
+                                            //MatrixBoard[x, tempY] = 2;
+
                                         }
-                                        ct--;
+
+                                        while (ct != 0)
+                                        {
+                                            MatrixBoard[ct, y] = 2;
+
+                                            if (MatrixBoard[ct, y] == 2)
+                                            {
+                                                MatrixBoard[x, tempY] = 0;
+                                            }
+                                            ct--;
+                                        }
                                     }
                                 }
                             }
@@ -838,118 +909,77 @@ namespace Backgammon
                     }
                     else
                     {
-                        y = Math.Abs(y - pasi) - 1;
-                        if (MatrixBoard[0, y] == 1 && MatrixBoard[1, y] == 0)
+                        y += pasi;
+                        if (y < 12)
                         {
-                            MoveThePieceToMatrix(0, y);
-                            MatrixBoard[0, y] = 2;
-                            Redeseneaza();
-
-                        }
-                        else
-                        {
-                            if (MatrixBoard[0, y] == 1 && MatrixBoard[1, y] == 1)
+                            if (MatrixBoard[0, y] == 1 && MatrixBoard[1, y] == 0)
                             {
-                                MatrixBoard[x, tempY] = 2;
-                                if (IsDouble == true)
-                                {
-                                    MiniScoreCubes--;
-                                }
-                                else MiniScoreCubes -= 2;
-                                label3.Text = MiniScoreCubes.ToString();
+                                MoveThePieceToMatrix(0, y);
+                                MatrixBoard[0, y] = 2;
+                                Redeseneaza();
+
                             }
                             else
                             {
-                                if (MatrixBoard[0, y] == 0) { MatrixBoard[0, y] = 2; }
+                                if (MatrixBoard[0, y] == 1 && MatrixBoard[1, y] == 1)
+                                {
+                                    MatrixBoard[x, tempY] = 2;
+                                    if (IsDouble == true)
+                                    {
+                                        MiniScoreCubes--;
+                                    }
+                                    else MiniScoreCubes -= 2;
+                                    label3.Text = MiniScoreCubes.ToString();
+                                }
                                 else
                                 {
-                                    int ct = 0;
-                                    for (int i = 0; i < 6; i++)
+                                    if (MatrixBoard[0, y] == 0) { MatrixBoard[0, y] = 2; }
+                                    else
                                     {
-                                        if (MatrixBoard[i, y] == 2)
+                                        int ct = 0;
+                                        for (int i = 0; i < 6; i++)
                                         {
-                                            ct++;
+                                            if (MatrixBoard[i, y] == 2)
+                                            {
+                                                ct++;
+                                            }
+                                            //MatrixBoard[x, tempY] = 2;
                                         }
-                                        //MatrixBoard[x, tempY] = 2;
 
-                                    }
-
-                                    while (ct != 0)
-                                    {
-                                        MatrixBoard[ct, y] = 2;
-
-                                        if (MatrixBoard[ct, y] == 2)
+                                        while (ct != 0)
                                         {
-                                            MatrixBoard[x, tempY] = 0;
+                                            MatrixBoard[ct, y] = 2;
+
+                                            if (MatrixBoard[ct, y] == 2)
+                                            {
+                                                MatrixBoard[x, tempY] = 0;
+                                            }
+                                            ct--;
                                         }
-                                        ct--;
                                     }
                                 }
                             }
+                        }
+                        else
+                        {
+
+                            MatrixBoard[x, tempY] = 2;
+                            //MiniScoreCubes--;
+                            //label3.Text = MiniScoreCubes.ToString();
                         }
                     }
                 }
                 else
                 {
-                    y += pasi;
-                    if (y < 12)
+                    int pos = 0;
+                    for (int i = 0; i < 5; i++)
                     {
-                        if (MatrixBoard[0, y] == 1 && MatrixBoard[1, y] == 0)
-                        {
-                            MoveThePieceToMatrix(0, y);
-                            MatrixBoard[0, y] = 2;
-                            Redeseneaza();
-
-                        }
-                        else
-                        {
-                            if (MatrixBoard[0, y] == 1 && MatrixBoard[1, y] == 1)
-                            {
-                                MatrixBoard[x, tempY] = 2;
-                                if (IsDouble == true)
-                                {
-                                    MiniScoreCubes--;
-                                }
-                                else MiniScoreCubes -= 2;
-                                label3.Text = MiniScoreCubes.ToString();
-                            }
-                            else
-                            {
-                                if (MatrixBoard[0, y] == 0) { MatrixBoard[0, y] = 2; }
-                                else
-                                {
-                                    int ct = 0;
-                                    for (int i = 0; i < 6; i++)
-                                    {
-                                        if (MatrixBoard[i, y] == 2)
-                                        {
-                                            ct++;
-                                        }
-                                        //MatrixBoard[x, tempY] = 2;
-                                    }
-
-                                    while (ct != 0)
-                                    {
-                                        MatrixBoard[ct, y] = 2;
-
-                                        if (MatrixBoard[ct, y] == 2)
-                                        {
-                                            MatrixBoard[x, tempY] = 0;
-                                        }
-                                        ct--;
-                                    }
-                                }
-                            }
-                        }
+                        if (OutPieces[1, i] == 2) { pos = i; }
                     }
-                    else
-                    {
-
-                        MatrixBoard[x, tempY] = 2;
-                        //MiniScoreCubes--;
-                        //label3.Text = MiniScoreCubes.ToString();
-                    }
-                }
+                    InsertRedChecker(OutPieces[1,pos], a);
+                    MatrixBoard[x, y] = 2;
+                    MiniScoreCubes = 5;
+                } 
 
             }
             //}
@@ -1025,7 +1055,7 @@ namespace Backgammon
 
         private void button3_Click(object sender, EventArgs e)
         {
-                GetAllPosibbleMovesRedPlayer();
+            GetAllPosibbleCheckersToMoveRedPlayer();
         }
 
         public void InsertChecker(int x, int y ,int zar)
@@ -1062,6 +1092,54 @@ namespace Backgammon
                 }
             }
             Redeseneaza();
+        }
+
+
+        public void InsertRedChecker(int v, int zar)
+        {
+            {
+                if (MatrixBoard[11, 12 - zar] == 1 && MatrixBoard[10, 12 - zar] == 1) { v = 2; }
+                if (MatrixBoard[11, 12 - zar] == 1 && MatrixBoard[10, 12 - zar] == 0)
+                {
+                    MoveThePieceToMatrix(11, 12 - zar);
+                    MatrixBoard[11, 12 - zar] = 2;
+                    v = 0;
+                    DeletePictureBoxOut(1, v);
+                    Redeseneaza();
+                }
+                if (MatrixBoard[11, 12 - zar] == 0)
+                {
+                    MatrixBoard[11, 12 - zar] = 2;
+                    v = 0;
+                    DeletePictureBoxOut(1, v);
+                }
+                else
+                {
+                    int ct = 0;
+                    for (int i = 11; i > 5; i--)
+                    {
+                        if (MatrixBoard[i, 12 - zar] == 2)
+                        {
+                            ct++;
+                        }
+                    }
+                    MatrixBoard[ct, 12 - zar] = 2;
+                    v = 0;
+                    DeletePictureBoxOut(1, v);
+                }
+            }
+            Redeseneaza();
+        }
+
+
+
+
+
+
+        public void MiniMax(int x, int y, int d1, int d2, int depth, bool maxPlayer)
+        {
+            if (depth == 0) { }
+            GetAllPosibbleCheckersToMoveRedPlayer();
         }
     }
 
