@@ -14,16 +14,16 @@ namespace Backgammon
     public partial class Form1 : Form
     {
         readonly int[,] MatrixBoard = new int[12, 12];
-        readonly int[,] OutPieces = new int[2, 5];
+        readonly int[,] OutPiecesMatrix = new int[2, 5];
 
         public Dice DiceRoll { get; set; }
 
-        public int Moves = 0;
-        public int MiniScoreCubes = 0;
+        public int DiceNumber = 0;
+        public int MiniScoreDice = 0;
 
         public int CoordX, CoordY;
         public bool IsDouble;
-        public int PieceBackOnBoard = 0;
+        public int PositionPieceBackOnBoard = 0;
 
         Player playerHuman = new Player("Human", Player.PlayerColor.Black);
         Player playerAI = new Player("AI", Player.PlayerColor.Red);
@@ -35,7 +35,7 @@ namespace Backgammon
             playerHuman.isTurn = true;
             label2.Text = "Human";
             label2.Font = new Font("Arial", 30);
-            label3.Text = MiniScoreCubes.ToString();
+            label3.Text = MiniScoreDice.ToString();
             Redraw();
         }
 
@@ -77,8 +77,8 @@ namespace Backgammon
         {
             DiceRoll = new Dice();
             DiceRoll.RollDice();
-            MiniScoreCubes = 1;
-            label3.Text = MiniScoreCubes.ToString();
+            MiniScoreDice = 1;
+            label3.Text = MiniScoreDice.ToString();
 
             switch (DiceRoll.Cube1)
             {
@@ -108,50 +108,45 @@ namespace Backgammon
         {
             if (IsDouble == false)
             {
-                Moves = 1;
-                MiniScoreCubes += 2;
-                label3.Text = MiniScoreCubes.ToString();
+                DiceNumber = 1;
+                MiniScoreDice += 2;
             }
             else
             {
-                Moves = 1;
-                MiniScoreCubes++;
-                label3.Text = MiniScoreCubes.ToString();
+                DiceNumber = 1;
+                MiniScoreDice++;
             }
-
+            label3.Text = MiniScoreDice.ToString();
         }
 
         private void Cube2Click(object sender, MouseEventArgs e)
         {
             if (IsDouble == false)
             {
-                Moves = 2;
-                MiniScoreCubes += 2;
-                label3.Text = MiniScoreCubes.ToString();
+                DiceNumber = 2;
+                MiniScoreDice += 2;
             }
             else
             {
-                Moves = 2;
-                MiniScoreCubes++;
-                label3.Text = MiniScoreCubes.ToString();
+                DiceNumber = 2;
+                MiniScoreDice++;
             }
+            label3.Text = MiniScoreDice.ToString();
         }
 
         private void SumCubesClick(object sender, MouseEventArgs e)
         {
             if (IsDouble == false)
             {
-                Moves = 3;
-                MiniScoreCubes += 4;
-                label3.Text = MiniScoreCubes.ToString();
+                DiceNumber = 3;
+                MiniScoreDice += 4;
             }
             else
             {
-                Moves = 3;
-                MiniScoreCubes += 2;
-                label3.Text = MiniScoreCubes.ToString();
+                DiceNumber = 3;
+                MiniScoreDice += 2;
             }
-
+            label3.Text = MiniScoreDice.ToString();
         }
 
         #endregion
@@ -189,7 +184,6 @@ namespace Backgammon
                             Height = 60,
                             Location = new Point(j * 77 + 135, i * 52 + 120)
                         };
-                        //pic.MouseClick += new MouseEventHandler(Pic_OnClickRed);
                         this.Controls.Add(pic);
                         pic.BringToFront();
                     }
@@ -200,7 +194,7 @@ namespace Backgammon
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    if (OutPieces[i, j] == 1)
+                    if (OutPiecesMatrix[i, j] == 1)
                     {
                         PictureBox outPic = new PictureBox
                         {
@@ -216,7 +210,7 @@ namespace Backgammon
                         outPic.BringToFront();
                     }
 
-                    if (OutPieces[i, j] == 2)
+                    if (OutPiecesMatrix[i, j] == 2)
                     {
                         PictureBox outPic = new PictureBox
                         {
@@ -227,7 +221,6 @@ namespace Backgammon
                             Height = 60,
                             Location = new Point(j * 50 + 1100, i * 52 + 100)
                         };
-                        //outPic.MouseClick += new MouseEventHandler(OutPics_OnClickRed);
                         this.Controls.Add(outPic);
                         outPic.BringToFront();
                     }
@@ -237,7 +230,7 @@ namespace Backgammon
 
         private void label3_TextChanged(object sender, EventArgs e)
         {
-            if (MiniScoreCubes == 5)
+            if (MiniScoreDice == 5)
             {
                 rollDice.Enabled = true;
             }
@@ -275,19 +268,6 @@ namespace Backgammon
             this.Refresh();
         }
 
-        public PictureBox GetPictureBox(int x, int y)
-        {
-            var name = String.Format("pb_{0}_{1}", x, y);
-            foreach (Control c in this.Controls)
-            {
-                if (c.Name == name)
-                {
-                    return c as PictureBox;
-                }
-            }
-            return null;
-        }
-
         #endregion
         #region Human Player Controls
 
@@ -309,9 +289,9 @@ namespace Backgammon
                 var b = DiceRoll.Cube2;
                 MatrixBoard[x, y] = 0;
                 var pasi = 0;
-                if (Moves == 1) { pasi = a; }
-                if (Moves == 2) { pasi = b; }
-                if (Moves == 3) { pasi = (a + b); }
+                if (DiceNumber == 1) { pasi = a; }
+                if (DiceNumber == 2) { pasi = b; }
+                if (DiceNumber == 3) { pasi = (a + b); }
 
                 DeletePictureBox(x, y);
                 if (x < 6)
@@ -435,7 +415,7 @@ namespace Backgammon
 
             }
             Redraw();
-            if (MiniScoreCubes == 5)
+            if (MiniScoreDice == 5)
             {
                 int p = 1;
                 SwitchPlayer(p);
@@ -445,32 +425,32 @@ namespace Backgammon
 
         private void GetOnBoardPos1(object sender, EventArgs e)
         {
-            PieceBackOnBoard = 1;
+            PositionPieceBackOnBoard = 1;
         }
 
         private void GetOnBoardPos2(object sender, EventArgs e)
         {
-            PieceBackOnBoard = 2;
+            PositionPieceBackOnBoard = 2;
         }
 
         private void GetOnBoardPos3(object sender, EventArgs e)
         {
-            PieceBackOnBoard = 3;
+            PositionPieceBackOnBoard = 3;
         }
 
         private void GetOnBoardPos4(object sender, EventArgs e)
         {
-            PieceBackOnBoard = 4;
+            PositionPieceBackOnBoard = 4;
         }
 
         private void GetOnBoardPos5(object sender, EventArgs e)
         {
-            PieceBackOnBoard = 5;
+            PositionPieceBackOnBoard = 5;
         }
 
         private void GetOnBoardPos6(object sender, EventArgs e)
         {
-            PieceBackOnBoard = 6;
+            PositionPieceBackOnBoard = 6;
         }
 
         private void OutPics_OnClickBlack(object sender, MouseEventArgs e)
@@ -480,38 +460,37 @@ namespace Backgammon
             CoordX = Convert.ToInt32(Coord[1]);
             CoordY = Convert.ToInt32(Coord[2]);
 
-
             var x = CoordX;
             var y = CoordY;
 
             var a = DiceRoll.Cube1;
             var b = DiceRoll.Cube2;
 
-            if (OutPieces[0, 0] != 0)
+            if (OutPiecesMatrix[0, 0] != 0)
             {
                 DeletePictureBoxOut(x, y);
-                if (a == PieceBackOnBoard)
+                if (a == PositionPieceBackOnBoard)
                 {
                     InsertChecker(x, y, a);
                 }
-                else if (b == PieceBackOnBoard) { InsertChecker(x, y, b); }
+                else if (b == PositionPieceBackOnBoard) { InsertChecker(x, y, b); }
             }
         }
 
         public void InsertChecker(int x, int y, int zar)
         {
-            if (MatrixBoard[0, 12 - zar] == 2 && MatrixBoard[1, 12 - zar] == 2) { OutPieces[x, y] = 1; }
+            if (MatrixBoard[0, 12 - zar] == 2 && MatrixBoard[1, 12 - zar] == 2) { OutPiecesMatrix[x, y] = 1; }
             if (MatrixBoard[0, 12 - zar] == 2 && MatrixBoard[1, 12 - zar] == 0)
             {
                 MoveThePieceToMatrix(0, 12 - zar);
                 MatrixBoard[0, 12 - zar] = 1;
-                OutPieces[x, y] = 0;
+                OutPiecesMatrix[x, y] = 0;
                 DeletePictureBoxOut(x, y);
             }
             if (MatrixBoard[0, 12 - zar] == 0)
             {
                 MatrixBoard[0, 12 - zar] = 1;
-                OutPieces[x, y] = 0;
+                OutPiecesMatrix[x, y] = 0;
                 DeletePictureBoxOut(x, y);
             }
             else
@@ -525,7 +504,7 @@ namespace Backgammon
                     }
                 }
                 MatrixBoard[ct, 12 - zar] = 1;
-                OutPieces[x, y] = 0;
+                OutPiecesMatrix[x, y] = 0;
                 DeletePictureBoxOut(x, y);
             }
             Redraw();
@@ -536,20 +515,20 @@ namespace Backgammon
 
         public void InsertRedChecker(int pos, int zar)
         {
-            if (MatrixBoard[11, 12 - zar] == 1 && MatrixBoard[10, 12 - zar] == 1) { OutPieces[1, pos] = 2; }
+            if (MatrixBoard[11, 12 - zar] == 1 && MatrixBoard[10, 12 - zar] == 1) { OutPiecesMatrix[1, pos] = 2; }
             if (MatrixBoard[11, 12 - zar] == 1 && MatrixBoard[10, 12 - zar] == 0)
             {
                 MoveThePieceToMatrix(11, 12 - zar);
                 MatrixBoard[11, 12 - zar] = 2;
                 DeletePictureBoxOut(1, pos);
-                OutPieces[1, pos] = 0;
+                OutPiecesMatrix[1, pos] = 0;
                 
             }
             if (MatrixBoard[11, 12 - zar] == 0)
             {
                 MatrixBoard[11, 12 - zar] = 2;
                 DeletePictureBoxOut(1, pos);
-                OutPieces[1, pos] = 0;
+                OutPiecesMatrix[1, pos] = 0;
             }
             else
             {
@@ -563,7 +542,7 @@ namespace Backgammon
                 }
                 MatrixBoard[ct, 12 - zar] = 2;
                 DeletePictureBoxOut(1, pos);
-                OutPieces[1, pos] = 0;
+                OutPiecesMatrix[1, pos] = 0;
             }
             Redraw();
         }
@@ -589,67 +568,67 @@ namespace Backgammon
                 var b = DiceRoll.Cube2;
                 MatrixBoard[x, y] = 0;
                 var pasi = 0;
-                if (MiniScoreCubes == 1)
+                if (MiniScoreDice == 1)
                 {
                     Random random = new Random();
-                    Moves = random.Next(1, 3);
+                    DiceNumber = random.Next(1, 3);
                 }
                 /*
-                if (Moves == 1) { pasi = a; MiniScoreCubes++; Moves = 2; }
-                else if (Moves == 2) { pasi = b; MiniScoreCubes++; Moves = 1; }
-                else if (Moves == 3) { pasi = (a + b); MiniScoreCubes += 2; }
+                if (Moves == 1) { pasi = a; MiniScoreDice++; Moves = 2; }
+                else if (Moves == 2) { pasi = b; MiniScoreDice++; Moves = 1; }
+                else if (Moves == 3) { pasi = (a + b); MiniScoreDice += 2; }
                 */
 
-                if (Moves == 1)
+                if (DiceNumber == 1)
                 {
                     if (IsDouble == false)
                     {
                         pasi = a;
-                        MiniScoreCubes += 2;
-                        Moves = 2;
+                        MiniScoreDice += 2;
+                        DiceNumber = 2;
                     }
                     else
                     {
                         pasi = a;
-                        MiniScoreCubes++;
-                        Moves = 1;
+                        MiniScoreDice++;
+                        DiceNumber = 1;
                     }
                 }
-                else if (Moves == 2)
+                else if (DiceNumber == 2)
                 {
                     if (IsDouble == false)
                     {
                         pasi = b;
-                        MiniScoreCubes += 2;
-                        Moves = 1;
+                        MiniScoreDice += 2;
+                        DiceNumber = 1;
                     }
                     else
                     {
                         pasi = b;
-                        MiniScoreCubes++;
-                        Moves = 2;
+                        MiniScoreDice++;
+                        DiceNumber = 2;
                     }
                 }
-                else if (Moves == 3)
+                else if (DiceNumber == 3)
                 {
                     if (IsDouble == false)
                     {
                         pasi = (a + b);
-                        MiniScoreCubes += 4;
+                        MiniScoreDice += 4;
                     }
                     else
                     {
                         pasi = (a + b);
-                        MiniScoreCubes += 2;
-                        Moves = 3;
+                        MiniScoreDice += 2;
+                        DiceNumber = 3;
                     }
                 }
-                label3.Text = MiniScoreCubes.ToString();
+                label3.Text = MiniScoreDice.ToString();
 
 
 
                 DeletePictureBox(x, y);
-                if (OutPieces[1, 0] == 0)
+                if (OutPiecesMatrix[1, 0] == 0)
                 {
                     if (x > 6)
                     {
@@ -671,10 +650,10 @@ namespace Backgammon
                                     MatrixBoard[x, tempY] = 2;
                                     if (IsDouble == true)
                                     {
-                                        MiniScoreCubes--;
+                                        MiniScoreDice--;
                                     }
-                                    else MiniScoreCubes -= 2;
-                                    label3.Text = MiniScoreCubes.ToString();
+                                    else MiniScoreDice -= 2;
+                                    label3.Text = MiniScoreDice.ToString();
                                 }
                                 else
                                 {
@@ -721,10 +700,10 @@ namespace Backgammon
                                     MatrixBoard[x, tempY] = 2;
                                     if (IsDouble == true)
                                     {
-                                        MiniScoreCubes--;
+                                        MiniScoreDice--;
                                     }
-                                    else MiniScoreCubes -= 2;
-                                    label3.Text = MiniScoreCubes.ToString();
+                                    else MiniScoreDice -= 2;
+                                    label3.Text = MiniScoreDice.ToString();
                                 }
                                 else
                                 {
@@ -775,10 +754,10 @@ namespace Backgammon
                                     MatrixBoard[x, tempY] = 2;
                                     if (IsDouble == true)
                                     {
-                                        MiniScoreCubes--;
+                                        MiniScoreDice--;
                                     }
-                                    else MiniScoreCubes -= 2;
-                                    label3.Text = MiniScoreCubes.ToString();
+                                    else MiniScoreDice -= 2;
+                                    label3.Text = MiniScoreDice.ToString();
                                 }
                                 else
                                 {
@@ -821,25 +800,25 @@ namespace Backgammon
                     int rand = r.Next(1, 3);
                     for (int i = 0; i < 5; i++)
                     {
-                        if (OutPieces[1, i] == 2) { pos += 1; }
+                        if (OutPiecesMatrix[1, i] == 2) { pos += 1; }
                     }
                     if (rand == 1)
                     {
                         InsertRedChecker(pos, a);
                         //MatrixBoard[x, y] = 2;
-                        MiniScoreCubes = 5;
+                        MiniScoreDice = 5;
                     }
                     else
                     {
                         InsertRedChecker(pos, b);
                         //MatrixBoard[x, y] = 2;
-                        MiniScoreCubes = 5;
+                        MiniScoreDice = 5;
                     }
                 }
 
             }
             Redraw();
-            if (MiniScoreCubes == 5)
+            if (MiniScoreDice == 5)
             {
                 int p = 0;
                 SwitchPlayer(p);
@@ -927,18 +906,18 @@ namespace Backgammon
                 playerHuman.isTurn = true;
                 playerAI.isTurn = false;
                 label2.Text = playerHuman.Name;
-                label3.Text = MiniScoreCubes.ToString();
-                MiniScoreCubes = 0;
-                label3.Text = MiniScoreCubes.ToString();
+                label3.Text = MiniScoreDice.ToString();
+                MiniScoreDice = 0;
+                label3.Text = MiniScoreDice.ToString();
             }
             if (p == 1)
             {
                 playerHuman.isTurn = false;
                 playerAI.isTurn = true;
                 label2.Text = playerAI.Name;
-                label3.Text = MiniScoreCubes.ToString();
-                MiniScoreCubes = 0;
-                label3.Text = MiniScoreCubes.ToString();
+                label3.Text = MiniScoreDice.ToString();
+                MiniScoreDice = 0;
+                label3.Text = MiniScoreDice.ToString();
             }
         }
 
@@ -948,8 +927,8 @@ namespace Backgammon
             {
                 for (int i = 1; i < 5; i++)
                 {
-                    if (OutPieces[0, i - 1] == 1) { OutPieces[0, i] = 1; break; }
-                    else { OutPieces[0, i - 1] = 1; break; }
+                    if (OutPiecesMatrix[0, i - 1] == 1) { OutPiecesMatrix[0, i] = 1; break; }
+                    else { OutPiecesMatrix[0, i - 1] = 1; break; }
                 }
             }
 
@@ -957,8 +936,8 @@ namespace Backgammon
             {
                 for (int i = 1; i < 5; i++)
                 {
-                    if (OutPieces[1, i - 1] == 2) { OutPieces[1, i] = 2; break; }
-                    else { OutPieces[1, i - 1] = 2; break; }
+                    if (OutPiecesMatrix[1, i - 1] == 2) { OutPiecesMatrix[1, i] = 2; break; }
+                    else { OutPiecesMatrix[1, i - 1] = 2; break; }
                 }
             }
         }
@@ -971,8 +950,14 @@ namespace Backgammon
         //Incarcare Implementare
         public void ExpectiMiniMax(int x, int y, int d1, int d2, int depth, bool maxPlayer)
         {
-            if (depth == 0) { }
-            GetAllPosibbleCheckersToMoveRedPlayer();
+            double probabilityCubes = 0.0;
+            double score = 0.0;
+            
+            if (d1 == d2) probabilityCubes = 1.0 / 36.0;
+            else probabilityCubes = 1.0 / 18.0;
+
+            List<int> l = new List<int>();
+            l = GetAllPosibbleCheckersToMoveRedPlayer();
             
         }
     }
