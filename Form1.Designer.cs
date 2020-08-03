@@ -86,9 +86,8 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(546, 31);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 17);
+            this.label1.Size = new System.Drawing.Size(0, 17);
             this.label1.TabIndex = 42;
-            this.label1.Text = "Sum of cubes";
             this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SumCubesClick);
             // 
             // label2
@@ -108,7 +107,7 @@
             this.label3.Size = new System.Drawing.Size(52, 17);
             this.label3.TabIndex = 44;
             this.label3.Text = "label3";
-            this.label3.TextChanged += new System.EventHandler(this.label3_TextChanged);
+            this.label3.TextChanged += new System.EventHandler(this.Label3_TextChanged);
             // 
             // button1
             // 
