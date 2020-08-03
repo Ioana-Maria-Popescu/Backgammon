@@ -15,6 +15,8 @@ namespace Backgammon
     {
         readonly int[,] MatrixBoard = new int[12, 12];
         readonly int[,] OutPiecesMatrix = new int[2, 5];
+        List<int> FinalOutPiecesBlack = new List<int>(16);
+        List<int> FinalOutPiecesRed = new List<int>(16);
 
         public Dice DiceRoll { get; set; }
 
@@ -42,6 +44,7 @@ namespace Backgammon
         #region Initialization
         public void InitializeComponentsOnBoard()
         {
+            
             //0-nimic 1-black 2-red
             for (int i = 0; i < 5; i++)
             {
@@ -69,7 +72,44 @@ namespace Backgammon
 
             MatrixBoard[10, 11] = 2;
             MatrixBoard[11, 11] = 2;
+            /*
+            for (int i = 7; i < 12; i++)
+            {
+                //MatrixBoard[i, 0] = 2;
+                MatrixBoard[i, 6] = 1;
+            }
+            for (int i = 7; i < 12; i++)
+            {
+               // MatrixBoard[i, 0] = 2;
+                MatrixBoard[i, 7] = 1;
+            }
+            for (int i = 7; i < 12; i++)
+            {
+                //MatrixBoard[i, 0] = 2;
+                MatrixBoard[i, 8] = 1;
+            }
 
+
+
+
+
+            for (int i = 0; i < 5; i++)
+            {
+                //MatrixBoard[i, 0] = 2;
+                MatrixBoard[i, 6] = 2;
+                MatrixBoard[i, 7] = 2;
+                MatrixBoard[i, 8] = 2;
+            }
+*/
+
+            for (int i = 0; i < FinalOutPiecesBlack.Capacity; i++)
+            {
+                FinalOutPiecesBlack.Add(0);
+            }
+            for (int i = 0; i < FinalOutPiecesRed.Capacity; i++)
+            {
+                FinalOutPiecesRed.Add(0);
+            }
         }
         #endregion
         #region Dices
@@ -116,6 +156,12 @@ namespace Backgammon
                 DiceNumber = 1;
                 MiniScoreDice++;
             }
+
+
+            if (e.Clicks != 0)
+            {
+                CubePictureBox1.Enabled = false;
+            }
             label3.Text = MiniScoreDice.ToString();
         }
 
@@ -131,6 +177,12 @@ namespace Backgammon
                 DiceNumber = 2;
                 MiniScoreDice++;
             }
+
+
+            if (e.Clicks != 0)
+            {
+                CubePictureBox2.Enabled = false;
+            }
             label3.Text = MiniScoreDice.ToString();
         }
 
@@ -145,6 +197,11 @@ namespace Backgammon
             {
                 DiceNumber = 3;
                 MiniScoreDice += 2;
+            }
+
+            if (e.Clicks != 0)
+            {
+                label1.Enabled = false;
             }
             label3.Text = MiniScoreDice.ToString();
         }
@@ -226,6 +283,41 @@ namespace Backgammon
                     }
                 }
             }
+
+
+            for (int j = 0; j < FinalOutPiecesBlack.Capacity; j++)
+            {
+                if (FinalOutPiecesBlack[j] == 1)
+                {
+                    PictureBox pic = new PictureBox
+                    {
+                        Image = Properties.Resources.BlackChecker,
+                        SizeMode = PictureBoxSizeMode.StretchImage,
+                        Width = 60,
+                        Height = 60,
+                        Location = new Point(0 * 30 + 1100, j * 30 + 350)
+                    };
+                    this.Controls.Add(pic);
+                    pic.BringToFront();
+                }
+            }
+
+            for (int j = 0; j < FinalOutPiecesRed.Capacity; j++)
+            {
+                if (FinalOutPiecesRed[j] == 2)
+                {
+                    PictureBox pic = new PictureBox
+                    {
+                        Image = Properties.Resources.RedChecker,
+                        SizeMode = PictureBoxSizeMode.StretchImage,
+                        Width = 60,
+                        Height = 60,
+                        Location = new Point(5 * 30 + 1100, j * 30 + 350)
+                    };
+                    this.Controls.Add(pic);
+                    pic.BringToFront();
+                }
+            }
         }
 
         private void label3_TextChanged(object sender, EventArgs e)
@@ -277,11 +369,12 @@ namespace Backgammon
             var Coord = pb.Name.Split('_');
             CoordX = Convert.ToInt32(Coord[1]);
             CoordY = Convert.ToInt32(Coord[2]);
-
-
+            
             var x = CoordX;
             var y = CoordY;
             int tempY = y;
+
+            int times = 1;
 
             if (playerHuman.isTurn == true)
             {
@@ -289,137 +382,260 @@ namespace Backgammon
                 var b = DiceRoll.Cube2;
                 MatrixBoard[x, y] = 0;
                 var pasi = 0;
-                if (DiceNumber == 1) { pasi = a; }
-                if (DiceNumber == 2) { pasi = b; }
-                if (DiceNumber == 3) { pasi = (a + b); }
 
-                DeletePictureBox(x, y);
-                if (x < 6)
+                try
                 {
-                    if (y - pasi >= 0)
+                    switch (DiceNumber)
                     {
-                        y -= pasi;
-
-                        if (MatrixBoard[0, y] == 2 && MatrixBoard[1, y] == 0)
+                        case 1:
+                            {
+                                pasi = a;
+                                break;
+                            }
+                        case 2:
+                            {
+                                pasi = b;
+                                break;
+                            }
+                        case 3:
+                            {
+                                pasi = a + b;
+                                break;
+                            }
+                        default:
+                            {
+                                MessageBox.Show("Choose a dice");
+                                return;
+                            }
+                    }
+                    if (CheckUpperCheckers(x, y) == false)
+                    {
+                        DeletePictureBox(x, y);
+                        if (x < 6)
                         {
-                            MoveThePieceToMatrix(0, y);
-                            MatrixBoard[0, y] = 1;
-                            Redraw();
+                            if (y - pasi >= 0)
+                            {
+                                y -= pasi;
+                                if (MatrixBoard[0, y] == 2 && MatrixBoard[1, y] == 0)
+                                {
+                                    MoveThePieceToMatrix(0, y);
+                                    MatrixBoard[0, y] = 1;
+                                    Redraw();
 
+                                }
+                                else
+                                {
+                                    if (MatrixBoard[0, y] == 0) { MatrixBoard[0, y] = 1; }
+                                    else
+                                    {
+                                        int ct = 0;
+                                        for (int i = 0; i < 6; i++)
+                                        {
+                                            if (MatrixBoard[i, y] == 1)
+                                            {
+                                                ct++;
+                                            }
+                                            MatrixBoard[x, tempY] = 1;
+                                        }
+
+                                        while (ct != 0)
+                                        {
+                                            MatrixBoard[ct, y] = 1;
+
+                                            if (MatrixBoard[ct, y] == 1)
+                                            {
+                                                MatrixBoard[x, tempY] = 0;
+                                            }
+                                            ct--;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                y = Math.Abs(y - pasi) - 1;
+                                if (MatrixBoard[11, y] == 2 && MatrixBoard[10, y] == 0)
+                                {
+                                    MoveThePieceToMatrix(11, y);
+                                    MatrixBoard[11, y] = 1;
+                                    Redraw();
+
+                                }
+                                else
+                                {
+                                    if (MatrixBoard[11, y] == 0) { MatrixBoard[11, y] = 1; }
+                                    else
+                                    {
+                                        int ct = 0;
+
+
+                                        if (MatrixBoard[11, y] == 2 && MatrixBoard[10, y] == 2)
+                                        {
+                                            MatrixBoard[x, tempY] = 1;
+                                            if (IsDouble == true)
+                                            {
+                                                MiniScoreDice--;
+                                            }
+                                            else MiniScoreDice -= 2;
+                                            label3.Text = MiniScoreDice.ToString();
+                                        }
+
+
+                                        for (int i = 11; i > 5; i--)
+                                        {
+                                            if (MatrixBoard[i, y] == 1)
+                                            {
+                                                ct++;
+                                            }
+                                            MatrixBoard[x, tempY] = 1;
+                                        }
+
+                                        while (ct != 0)
+                                        {
+                                            MatrixBoard[11 - ct, y] = 1;
+
+                                            if (MatrixBoard[11 - ct, y] == 1)
+                                            {
+                                                MatrixBoard[x, tempY] = 0;
+                                            }
+                                            ct--;
+                                        }
+                                    }
+                                }
+                            }
                         }
                         else
                         {
-                            if (MatrixBoard[0, y] == 0) { MatrixBoard[0, y] = 1; }
+                            if (y + pasi < 12)
+                            {
+                                y += pasi;
+                                if (MatrixBoard[11, y] == 2 && MatrixBoard[10, y] == 0)
+                                {
+                                    MoveThePieceToMatrix(11, y);
+                                    MatrixBoard[11, y] = 1;
+                                    Redraw();
+
+                                }
+                                else
+                                {
+                                    if (MatrixBoard[11, y] == 0) { MatrixBoard[11, y] = 1; }
+                                    else
+                                    {
+                                        int ct = 0;
+                                        //if(MatrixBoard[11,y]==2 && MatrixBoard[10, y] == 2)
+                                        //{
+                                        //    MatrixBoard[x, tempY] = 1;
+                                        //    if (IsDouble == true)
+                                        //    {
+                                        //        MiniScoreDice--;
+                                        //    }
+                                        //    else MiniScoreDice -= 2;
+                                        //}
+                                        for (int i = 11; i > 5; i--)
+                                        {
+                                            if (MatrixBoard[i, y] == 1)
+                                            {
+                                                ct++;
+                                            }
+                                            MatrixBoard[x, tempY] = 1;
+                                        }
+
+                                        while (ct != 0)
+                                        {
+                                            MatrixBoard[11 - ct, y] = 1;
+
+                                            if (MatrixBoard[11 - ct, y] == 1)
+                                            {
+                                                MatrixBoard[x, tempY] = 0;
+                                            }
+                                            ct--;
+                                        }
+                                    }
+                                }
+                            }
                             else
                             {
-                                int ct = 0;
-                                for (int i = 0; i < 6; i++)
+                                if (CheckDoneBlack() == true)
                                 {
-                                    if (MatrixBoard[i, y] == 1)
-                                    {
-                                        ct++;
-                                    }
-                                    MatrixBoard[x, tempY] = 1;
+                                    MoveCheckerToFinalMatrix(true, y, pasi);
                                 }
-
-                                while (ct != 0)
-                                {
-                                    MatrixBoard[ct, y] = 1;
-
-                                    if (MatrixBoard[ct, y] == 1)
-                                    {
-                                        MatrixBoard[x, tempY] = 0;
-                                    }
-                                    ct--;
-                                }
+                                else MatrixBoard[x, y] = 1;
                             }
                         }
                     }
                     else
                     {
-                        y = Math.Abs(y - pasi) - 1;
-                        if (MatrixBoard[11, y] == 2 && MatrixBoard[10, y] == 0)
-                        {
-                            MoveThePieceToMatrix(11, y);
-                            MatrixBoard[11, y] = 1;
-                            Redraw();
-
-                        }
-                        else
-                        {
-                            if (MatrixBoard[11, y] == 0) { MatrixBoard[11, y] = 1; }
-                            else
-                            {
-                                int ct = 0;
-                                for (int i = 11; i > 5; i--)
-                                {
-                                    if (MatrixBoard[i, y] == 1)
-                                    {
-                                        ct++;
-                                    }
-                                    MatrixBoard[x, tempY] = 1;
-                                }
-
-                                while (ct != 0)
-                                {
-                                    MatrixBoard[11 - ct, y] = 1;
-
-                                    if (MatrixBoard[11 - ct, y] == 1)
-                                    {
-                                        MatrixBoard[x, tempY] = 0;
-                                    }
-                                    ct--;
-                                }
-                            }
-                        }
+                        MatrixBoard[x, y] = 1;
+                        if (IsDouble == true) MiniScoreDice--;
+                        else MiniScoreDice -= 2;
+                        label3.Text = MiniScoreDice.ToString();
                     }
                 }
-                else
+                catch
                 {
-                    y += pasi;
-                    if (MatrixBoard[11, y] == 2 && MatrixBoard[10, y] == 0)
-                    {
-                        MoveThePieceToMatrix(11, y);
-                        MatrixBoard[11, y] = 1;
-                        Redraw();
-
-                    }
-                    else
-                    {
-                        if (MatrixBoard[11, y] == 0) { MatrixBoard[11, y] = 1; }
-                        else
-                        {
-                            int ct = 0;
-                            for (int i = 11; i > 5; i--)
-                            {
-                                if (MatrixBoard[i, y] == 1)
-                                {
-                                    ct++;
-                                }
-                                MatrixBoard[x, tempY] = 1;
-                            }
-
-                            while (ct != 0)
-                            {
-                                MatrixBoard[11 - ct, y] = 1;
-
-                                if (MatrixBoard[11 - ct, y] == 1)
-                                {
-                                    MatrixBoard[x, tempY] = 0;
-                                }
-                                ct--;
-                            }
-                        }
-                    }
+                    MessageBox.Show("Roll the dice");
                 }
-
             }
             Redraw();
+            
             if (MiniScoreDice == 5)
             {
                 int p = 1;
                 SwitchPlayer(p);
             }
+            Winner(AreThereAnyBlackPiecesOnTheBoard(), AreThereAnyRedPiecesOnTheBoard());
+        }
+
+        private bool CheckUpperCheckers(int x, int y)
+        {
+            int ct = 0;
+            if (x < 6)
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    if (MatrixBoard[i, y] == 1)
+                    {
+                        ct++;
+                    }
+                }
+                if (x == ct) return false;
+                else return true;
+            }
+            else
+            {
+                for (int i = 11; i > 6; i--)
+                {
+                    if (MatrixBoard[i, y] == 1)
+                    {
+                        ct++;
+                    }
+                }
+                if (x == 11 - ct) return false;
+                else return true;
+            }
+        }
+
+        private bool CheckDoneBlack()
+        {
+            int ctCheckersOut = 0;
+            for (int i = 0; i < FinalOutPiecesBlack.Capacity; i++)
+            {
+                if (FinalOutPiecesBlack[i] == 1) { ctCheckersOut++; }
+            }
+            if (ctCheckersOut > 0) return true;
+            int ct = 0;
+            for (int i = 6; i <= 11; i++)
+            {
+                for (int j = 6; j <= 11; j++)
+                {
+                    if (MatrixBoard[i, j] == 1)
+                    {
+                        ct++;
+                    }
+                }
+            }
+            if (ct + 1 == 15) { return true; }
+            return false;
         }
 
 
@@ -510,6 +726,22 @@ namespace Backgammon
             Redraw();
         }
 
+        private bool AreThereAnyBlackPiecesOnTheBoard()
+        {
+            int ct = 0;
+            for (int i = 6; i <= 11; i++)
+            {
+                for (int j = 6; j <= 11; j++)
+                {
+                    if (MatrixBoard[i, j] == 1)
+                    {
+                        ct++;
+                    }
+                }
+            }
+            if (ct > 0) return true;
+            else return false;
+        }
         #endregion
         #region AI Player Controls
 
@@ -691,7 +923,6 @@ namespace Backgammon
                                 MoveThePieceToMatrix(0, y);
                                 MatrixBoard[0, y] = 2;
                                 Redraw();
-
                             }
                             else
                             {
@@ -717,7 +948,6 @@ namespace Backgammon
                                             {
                                                 ct++;
                                             }
-
                                         }
 
                                         while (ct != 0)
@@ -745,7 +975,6 @@ namespace Backgammon
                                 MoveThePieceToMatrix(0, y);
                                 MatrixBoard[0, y] = 2;
                                 Redraw();
-
                             }
                             else
                             {
@@ -789,7 +1018,21 @@ namespace Backgammon
                         }
                         else
                         {
-                            MatrixBoard[x, tempY] = 2;
+                            //MatrixBoard[x, y] = 2;
+                            if (CheckDoneRed() == true)
+                            {
+                                MoveCheckerToFinalMatrix(false, y, pasi);
+                            }
+                            else
+                            {
+                                MatrixBoard[x, y - pasi] = 2;
+                                if (IsDouble == true)
+                                {
+                                    MiniScoreDice--;
+                                }
+                                else MiniScoreDice -= 2;
+                                label3.Text = MiniScoreDice.ToString();
+                            }
                         }
                     }
                 }
@@ -823,6 +1066,24 @@ namespace Backgammon
                 int p = 0;
                 SwitchPlayer(p);
             }
+            Winner(AreThereAnyBlackPiecesOnTheBoard(), AreThereAnyRedPiecesOnTheBoard());
+        }
+
+        private bool AreThereAnyRedPiecesOnTheBoard()
+        {
+            int ct = 0;
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = 6; j <= 11; j++)
+                {
+                    if (MatrixBoard[i, j] == 2)
+                    {
+                        ct++;
+                    }
+                }
+            }
+            if (ct > 0) return true;
+            else return false;
         }
 
         //private (int X, int Y) RandomRedChecker()
@@ -894,7 +1155,29 @@ namespace Backgammon
 
             return p;
         }
-
+        
+        private bool CheckDoneRed()
+        {
+            int ctCheckersOut = 0;
+            for (int i = 0; i < FinalOutPiecesRed.Capacity; i++)
+            {
+                if (FinalOutPiecesRed[i] == 2) { ctCheckersOut++; }
+            }
+            if (ctCheckersOut > 0) return true;
+            int ct = 0;
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = 6; j <= 11; j++)
+                {
+                    if (MatrixBoard[i, j] == 2)
+                    {
+                        ct++;
+                    }
+                }
+            }
+            if (ct + 1 == 15) { return true; }
+            return false;
+        }
         #endregion
         #region Both Players Controls
         private void SwitchPlayer(int p)
@@ -942,8 +1225,72 @@ namespace Backgammon
             }
         }
 
-        #endregion
+        //////////////////
+        private void MoveCheckerToFinalMatrix(bool isHuman, int y, int pasi)
+        {
+            if (isHuman == true)
+            {
+                int ct = 0;
+                if (y + pasi > 11)
+                {
+                    if (FinalOutPiecesBlack[0] == 0)
+                    {
+                        FinalOutPiecesBlack[0] = 1;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < FinalOutPiecesBlack.Capacity; i++)
+                        {
+                            if (FinalOutPiecesBlack[i] == 1) ct++;
+                        }
+                        for (int i = 0; i < ct + 1; i++)
+                        {
+                            FinalOutPiecesBlack[i] = 1;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                int ct = 0;
+                if (y + pasi > 11)
+                {
+                    if (FinalOutPiecesRed[0] == 0)
+                    {
+                        FinalOutPiecesRed[0] = 2;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < FinalOutPiecesRed.Capacity; i++)
+                        {
+                            if (FinalOutPiecesRed[i] == 2) ct++;
+                        }
+                        for (int i = 0; i < ct + 1; i++)
+                        {
+                            FinalOutPiecesRed[i] = 2;
+                        }
+                    }
+                }
+            }
+        }
 
+
+        private void Winner(bool black, bool red)
+        {
+            if (black == false && red == true)
+            {
+                WinnerBox.Text = "HUMAN";
+                MessageBox.Show("Winner is HUMAN");
+            }
+            if (black == true && red == false)
+            {
+                WinnerBox.Text = "AI";
+                MessageBox.Show("Winner is AI");
+            }
+            else WinnerBox.Text = "---------------";
+        }
+        #endregion
+        
 
         //ExpectiMiniMax algorithm (in Stochastic games) is a variation of the minimax algorithm, for use in AI systems that play two-player zero-sum games, such as backgammon.
 
