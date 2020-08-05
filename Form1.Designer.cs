@@ -49,6 +49,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.undoMove = new System.Windows.Forms.Button();
+            this.restartGame = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.CubePictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CubePictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BoardPictureBox)).BeginInit();
@@ -251,11 +253,35 @@
             this.groupBox3.TabIndex = 59;
             this.groupBox3.TabStop = false;
             // 
+            // undoMove
+            // 
+            this.undoMove.ForeColor = System.Drawing.Color.Red;
+            this.undoMove.Location = new System.Drawing.Point(1344, 28);
+            this.undoMove.Name = "undoMove";
+            this.undoMove.Size = new System.Drawing.Size(75, 23);
+            this.undoMove.TabIndex = 60;
+            this.undoMove.Text = "Undo";
+            this.undoMove.UseVisualStyleBackColor = true;
+            this.undoMove.Click += new System.EventHandler(this.UndoMove_Click);
+            // 
+            // restartGame
+            // 
+            this.restartGame.ForeColor = System.Drawing.Color.Black;
+            this.restartGame.Location = new System.Drawing.Point(1344, 57);
+            this.restartGame.Name = "restartGame";
+            this.restartGame.Size = new System.Drawing.Size(75, 23);
+            this.restartGame.TabIndex = 61;
+            this.restartGame.Text = "Restart";
+            this.restartGame.UseVisualStyleBackColor = true;
+            this.restartGame.Click += new System.EventHandler(this.RestartGame_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1444, 881);
+            this.Controls.Add(this.restartGame);
+            this.Controls.Add(this.undoMove);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -313,6 +339,8 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button undoMove;
+        private System.Windows.Forms.Button restartGame;
     }
 }
 
