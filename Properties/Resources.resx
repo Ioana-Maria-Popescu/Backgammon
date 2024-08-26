@@ -124,8 +124,8 @@
   <data name="BoardTem" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BoardTemplate.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="BoardTemplate1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BoardTemplate.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="BoardTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BoardTemplate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="RedChecker" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RedChecker.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

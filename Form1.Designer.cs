@@ -34,9 +34,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.pictureBox25 = new System.Windows.Forms.PictureBox();
-            this.pictureBox24 = new System.Windows.Forms.PictureBox();
+            this.MoveAIButton = new System.Windows.Forms.Button();
             this.CubePictureBox2 = new System.Windows.Forms.PictureBox();
             this.CubePictureBox1 = new System.Windows.Forms.PictureBox();
             this.BoardPictureBox = new System.Windows.Forms.PictureBox();
@@ -46,8 +44,14 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox25)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox24)).BeginInit();
+            this.WinnerBox = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.undoMove = new System.Windows.Forms.Button();
+            this.restartGame = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.CubePictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CubePictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BoardPictureBox)).BeginInit();
@@ -66,7 +70,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(1073, 322);
+            this.textBox1.Location = new System.Drawing.Point(1073, 299);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(126, 23);
             this.textBox1.TabIndex = 38;
@@ -74,7 +78,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(1209, 322);
+            this.textBox2.Location = new System.Drawing.Point(1218, 299);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(95, 23);
             this.textBox2.TabIndex = 39;
@@ -85,9 +89,8 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(546, 31);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 17);
+            this.label1.Size = new System.Drawing.Size(0, 17);
             this.label1.TabIndex = 42;
-            this.label1.Text = "Sum of cubes";
             this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SumCubesClick);
             // 
             // label2
@@ -107,33 +110,17 @@
             this.label3.Size = new System.Drawing.Size(52, 17);
             this.label3.TabIndex = 44;
             this.label3.Text = "label3";
-            this.label3.TextChanged += new System.EventHandler(this.label3_TextChanged);
+            this.label3.TextChanged += new System.EventHandler(this.Label3_TextChanged);
             // 
-            // button1
+            // MoveAIButton
             // 
-            this.button1.Location = new System.Drawing.Point(866, 28);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 45;
-            this.button1.Text = "Move AI";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.MoveAI_Click);
-            // 
-            // pictureBox25
-            // 
-            this.pictureBox25.Location = new System.Drawing.Point(1204, 351);
-            this.pictureBox25.Name = "pictureBox25";
-            this.pictureBox25.Size = new System.Drawing.Size(100, 423);
-            this.pictureBox25.TabIndex = 37;
-            this.pictureBox25.TabStop = false;
-            // 
-            // pictureBox24
-            // 
-            this.pictureBox24.Location = new System.Drawing.Point(1088, 351);
-            this.pictureBox24.Name = "pictureBox24";
-            this.pictureBox24.Size = new System.Drawing.Size(100, 423);
-            this.pictureBox24.TabIndex = 36;
-            this.pictureBox24.TabStop = false;
+            this.MoveAIButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.MoveAIButton.Location = new System.Drawing.Point(866, 9);
+            this.MoveAIButton.Name = "MoveAIButton";
+            this.MoveAIButton.Size = new System.Drawing.Size(75, 23);
+            this.MoveAIButton.TabIndex = 45;
+            this.MoveAIButton.UseVisualStyleBackColor = true;
+            this.MoveAIButton.Click += new System.EventHandler(this.MoveAI_Click);
             // 
             // CubePictureBox2
             // 
@@ -161,7 +148,8 @@
             this.BoardPictureBox.Location = new System.Drawing.Point(100, 100);
             this.BoardPictureBox.Margin = new System.Windows.Forms.Padding(4);
             this.BoardPictureBox.Name = "BoardPictureBox";
-            this.BoardPictureBox.Size = new System.Drawing.Size(1235, 720);
+            this.BoardPictureBox.Size = new System.Drawing.Size(966, 883);
+            this.BoardPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.BoardPictureBox.TabIndex = 0;
             this.BoardPictureBox.TabStop = false;
             // 
@@ -225,25 +213,105 @@
             this.label9.Text = "6";
             this.label9.Click += new System.EventHandler(this.GetOnBoardPos6);
             // 
+            // WinnerBox
+            // 
+            this.WinnerBox.Location = new System.Drawing.Point(1129, 34);
+            this.WinnerBox.Name = "WinnerBox";
+            this.WinnerBox.Size = new System.Drawing.Size(126, 23);
+            this.WinnerBox.TabIndex = 53;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(1153, 9);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(81, 25);
+            this.label10.TabIndex = 54;
+            this.label10.Text = "Winner";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Location = new System.Drawing.Point(1073, 63);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(258, 230);
+            this.groupBox1.TabIndex = 57;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Out Pieces";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Location = new System.Drawing.Point(1073, 328);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(122, 552);
+            this.groupBox2.TabIndex = 58;
+            this.groupBox2.TabStop = false;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Location = new System.Drawing.Point(1209, 328);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(122, 552);
+            this.groupBox3.TabIndex = 59;
+            this.groupBox3.TabStop = false;
+            // 
+            // undoMove
+            // 
+            this.undoMove.ForeColor = System.Drawing.Color.Red;
+            this.undoMove.Location = new System.Drawing.Point(1344, 28);
+            this.undoMove.Name = "undoMove";
+            this.undoMove.Size = new System.Drawing.Size(75, 23);
+            this.undoMove.TabIndex = 60;
+            this.undoMove.Text = "Undo";
+            this.undoMove.UseVisualStyleBackColor = true;
+            this.undoMove.Click += new System.EventHandler(this.UndoMove_Click);
+            // 
+            // restartGame
+            // 
+            this.restartGame.ForeColor = System.Drawing.Color.Black;
+            this.restartGame.Location = new System.Drawing.Point(1344, 57);
+            this.restartGame.Name = "restartGame";
+            this.restartGame.Size = new System.Drawing.Size(75, 23);
+            this.restartGame.TabIndex = 61;
+            this.restartGame.Text = "Restart";
+            this.restartGame.UseVisualStyleBackColor = true;
+            this.restartGame.Click += new System.EventHandler(this.RestartGame_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(1344, 86);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 62;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1444, 881);
+            this.ClientSize = new System.Drawing.Size(1444, 996);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.restartGame);
+            this.Controls.Add(this.undoMove);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.WinnerBox);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.MoveAIButton);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.pictureBox25);
-            this.Controls.Add(this.pictureBox24);
             this.Controls.Add(this.rollDice);
             this.Controls.Add(this.CubePictureBox2);
             this.Controls.Add(this.CubePictureBox1);
@@ -253,8 +321,6 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "BACKGAMMON";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox25)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox24)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CubePictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CubePictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BoardPictureBox)).EndInit();
@@ -269,20 +335,26 @@
         private System.Windows.Forms.PictureBox CubePictureBox1;
         private System.Windows.Forms.PictureBox CubePictureBox2;
         private System.Windows.Forms.Button rollDice;
-        private System.Windows.Forms.PictureBox pictureBox24;
-        private System.Windows.Forms.PictureBox pictureBox25;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button MoveAIButton;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox WinnerBox;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button undoMove;
+        private System.Windows.Forms.Button restartGame;
+        private System.Windows.Forms.Button button1;
     }
 }
 

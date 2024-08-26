@@ -143,9 +143,9 @@ namespace Backgammon.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BoardTemplate1 {
+        internal static System.Drawing.Bitmap BoardTemplate {
             get {
-                object obj = ResourceManager.GetObject("BoardTemplate1", resourceCulture);
+                object obj = ResourceManager.GetObject("BoardTemplate", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

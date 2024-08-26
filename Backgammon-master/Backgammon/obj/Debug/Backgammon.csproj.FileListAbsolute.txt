@@ -1,9 +1,0 @@
-C:\Users\Ioana\Desktop\Proiect AI\Backgammon\bin\Debug\Backgammon.exe.config
-C:\Users\Ioana\Desktop\Proiect AI\Backgammon\bin\Debug\Backgammon.exe
-C:\Users\Ioana\Desktop\Proiect AI\Backgammon\bin\Debug\Backgammon.pdb
-C:\Users\Ioana\Desktop\Proiect AI\Backgammon\obj\Debug\Backgammon.csprojAssemblyReference.cache
-C:\Users\Ioana\Desktop\Proiect AI\Backgammon\obj\Debug\Backgammon.Form1.resources
-C:\Users\Ioana\Desktop\Proiect AI\Backgammon\obj\Debug\Backgammon.Properties.Resources.resources
-C:\Users\Ioana\Desktop\Proiect AI\Backgammon\obj\Debug\Backgammon.csproj.GenerateResource.cache
-C:\Users\Ioana\Desktop\Proiect AI\Backgammon\obj\Debug\Backgammon.exe
-C:\Users\Ioana\Desktop\Proiect AI\Backgammon\obj\Debug\Backgammon.pdb
